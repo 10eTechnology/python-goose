@@ -28,7 +28,7 @@ class TweetsExtractor(BaseExtractor):
 
     def extract(self):
         tweets = []
-        items = self.parser.getElementsByTag(
+        items = self.parser.get_elements_by_tag(
                         self.article.top_node,
                         tag='blockquote',
                         attr="class",
@@ -36,7 +36,7 @@ class TweetsExtractor(BaseExtractor):
 
         for i in items:
             for attr in ['gravityScore', 'gravityNodes']:
-                self.parser.delAttribute(i, attr)
-            tweets.append(self.parser.nodeToString(i))
+                self.parser.del_attribute(i, attr)
+            tweets.append(self.parser.node_to_string(i))
 
         return tweets

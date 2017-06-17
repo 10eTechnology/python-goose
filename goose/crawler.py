@@ -99,11 +99,11 @@ class Crawler(object):
         # title extractor
         self.title_extractor = self.get_title_extractor()
 
-        # image extrator
+        # image extractor
         self.image_extractor = self.get_image_extractor()
 
         # html fetcher
-        self.htmlfetcher = HtmlFetcher(self.config)
+        self.html_fetcher = HtmlFetcher(self.config)
 
         # TODO : log prefix
         self.logPrefix = "crawler:"
@@ -212,10 +212,10 @@ class Crawler(object):
             return crawl_candidate.raw_html
 
         # fetch HTML
-        html = self.htmlfetcher.get_html(parsing_candidate.url)
+        html = self.html_fetcher.get_html(parsing_candidate.url)
         self.article.additional_data.update({
-            'request': self.htmlfetcher.request,
-            'result': self.htmlfetcher.result,
+            'request': self.html_fetcher.request,
+            'result': self.html_fetcher.result,
             })
         return html
 

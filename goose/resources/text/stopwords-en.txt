@@ -364,7 +364,7 @@ seemed
 seeming
 seems
 seen
-self
+cls
 selves
 sensible
 sent

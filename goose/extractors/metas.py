@@ -47,9 +47,9 @@ class MetasExtractor(BaseExtractor):
         <link rel="icon" type="image/png" href="favicon.png" />
         """
         kwargs = {'tag': 'link', 'attr': 'rel', 'value': 'icon'}
-        meta = self.parser.getElementsByTag(self.article.doc, **kwargs)
+        meta = self.parser.get_elements_by_tag(self.article.doc, **kwargs)
         if meta:
-            favicon = self.parser.getAttribute(meta[0], 'href')
+            favicon = self.parser.get_attribute(meta[0], 'href')
             return favicon
         return ''
 
@@ -59,9 +59,9 @@ class MetasExtractor(BaseExtractor):
         """
         if self.article.final_url:
             kwargs = {'tag': 'link', 'attr': 'rel', 'value': 'canonical'}
-            meta = self.parser.getElementsByTag(self.article.doc, **kwargs)
+            meta = self.parser.get_elements_by_tag(self.article.doc, **kwargs)
             if meta is not None and len(meta) > 0:
-                href = self.parser.getAttribute(meta[0], 'href')
+                href = self.parser.get_attribute(meta[0], 'href')
                 if href:
                     href = href.strip()
                     o = urlparse(href)
@@ -77,7 +77,7 @@ class MetasExtractor(BaseExtractor):
         Extract content language from meta
         """
         # we have a lang attribute in html
-        attr = self.parser.getAttribute(self.article.doc, attr='lang')
+        attr = self.parser.get_attribute(self.article.doc, attr='lang')
         if attr is None:
             # look up for a Content-Language in meta
             items = [
@@ -85,9 +85,9 @@ class MetasExtractor(BaseExtractor):
                 {'tag': 'meta', 'attr': 'name', 'value': 'lang'}
             ]
             for item in items:
-                meta = self.parser.getElementsByTag(self.article.doc, **item)
+                meta = self.parser.get_elements_by_tag(self.article.doc, **item)
                 if meta:
-                    attr = self.parser.getAttribute(meta[0], attr='content')
+                    attr = self.parser.get_attribute(meta[0], attr='content')
                     break
 
         if attr:
@@ -105,7 +105,7 @@ class MetasExtractor(BaseExtractor):
         content = None
 
         if meta is not None and len(meta) > 0:
-            content = self.parser.getAttribute(meta[0], 'content')
+            content = self.parser.get_attribute(meta[0], 'content')
 
         if content:
             return content.strip()

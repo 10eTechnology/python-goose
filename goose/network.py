@@ -26,6 +26,8 @@ import urllib2
 class HtmlFetcher(object):
 
     def __init__(self, config):
+        self.request = None
+        self.result = None
         self.config = config
         # set header
         self.headers = {'User-agent': self.config.browser_user_agent}

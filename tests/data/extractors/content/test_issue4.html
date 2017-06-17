@@ -1796,35 +1796,35 @@ function pop_it(url) {
     }
     function placeHeader() {
         try {
-            var OBDiv = document.getElementById("content_header");
-            document.getElementById("container_header").appendChild(OBDiv);
+            var OBDiv = document.get_element_by_id("content_header");
+            document.get_element_by_id("container_header").append_child(OBDiv);
         } catch(e) {
             // alert(e);
         }
     }
     function smartMoveEndPageDivs(){
         try {
-            var scr14320 = document.getElementById("smartSrc14320");
+            var scr14320 = document.get_element_by_id("smartSrc14320");
             scr14320.parentNode.removeChild(scr14320);
-            var secureDiv14320 = document.getElementById("smartEndPage14320");
-            document.getElementById("smart14320").appendChild(secureDiv14320);
-            var scr14323 = document.getElementById("smartSrc14323");
+            var secureDiv14320 = document.get_element_by_id("smartEndPage14320");
+            document.get_element_by_id("smart14320").append_child(secureDiv14320);
+            var scr14323 = document.get_element_by_id("smartSrc14323");
             scr14323.parentNode.removeChild(scr14323);
-            var secureDiv14323 = document.getElementById("smartEndPage14323");
-            document.getElementById("smart14323").appendChild(secureDiv14323);
-                        var scr14319 = document.getElementById("smartSrc14319");
+            var secureDiv14323 = document.get_element_by_id("smartEndPage14323");
+            document.get_element_by_id("smart14323").append_child(secureDiv14323);
+                        var scr14319 = document.get_element_by_id("smartSrc14319");
             scr14319.parentNode.removeChild(scr14319);
-            var secureDiv14319 = document.getElementById("smartEndPage14319");
-            document.getElementById("smart14319").appendChild(secureDiv14319);
-            var scr14324 = document.getElementById("smartSrc14324");
+            var secureDiv14319 = document.get_element_by_id("smartEndPage14319");
+            document.get_element_by_id("smart14319").append_child(secureDiv14319);
+            var scr14324 = document.get_element_by_id("smartSrc14324");
             scr14324.parentNode.removeChild(scr14324);
-            var secureDiv14324 = document.getElementById("smartEndPage14324");
-            document.getElementById("smart14324").appendChild(secureDiv14324);
+            var secureDiv14324 = document.get_element_by_id("smartEndPage14324");
+            document.get_element_by_id("smart14324").append_child(secureDiv14324);
             $('#article_text p:eq(1)').after('<div id="smart14321" style="width:304px;margin:0px auto;padding:2px;background-color:#edecec;"></div><div id="smart14321pub" style="width:304px;margin:0px auto;padding:2px;background-color:#edecec;text-align:right;">publicit&eacute;</div>');
-            var scr14321 = document.getElementById("smartSrc14321");
+            var scr14321 = document.get_element_by_id("smartSrc14321");
             scr14321.parentNode.removeChild(scr14321);
-            var secureDiv14321 = document.getElementById("smartEndPage14321");
-            document.getElementById("smart14321").appendChild(secureDiv14321);
+            var secureDiv14321 = document.get_element_by_id("smartEndPage14321");
+            document.get_element_by_id("smart14321").append_child(secureDiv14321);
             var check_pavmiddle_adv = $('#smart14321').height();
             if(check_pavmiddle_adv < 249){
                 $('#smart14321').css('display','none');

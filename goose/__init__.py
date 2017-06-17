@@ -21,7 +21,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import os
-import platform
 from tempfile import mkstemp
 
 from goose.version import version_info, __version__
@@ -34,6 +33,7 @@ class Goose(object):
     """\
 
     """
+
     def __init__(self, config=None):
         self.config = config or Configuration()
         self.extend_config()
@@ -58,43 +58,42 @@ class Goose(object):
     def shutdown_network(self):
         pass
 
-    def crawl(self, crawl_candiate):
+    def crawl(self, crawl_candidate):
         parsers = list(self.config.available_parsers)
         parsers.remove(self.config.parser_class)
         try:
-            crawler = Crawler(self.config)
-            article = crawler.crawl(crawl_candiate)
+            crawler_instance = Crawler(self.config)
+            article = crawler_instance.crawl(crawl_candidate)
         except (UnicodeDecodeError, ValueError):
             self.config.parser_class = parsers[0]
-            return self.crawl(crawl_candiate)
+            return self.crawl(crawl_candidate)
         return article
 
     def initialize(self):
         # we don't need to go further if image extractor or
         # local_storage is not set
         if not self.config.local_storage_path or \
-           not self.config.enable_image_fetching:
+                not self.config.enable_image_fetching:
             return
+
         # test if config.local_storage_path
         # is a directory
         if not os.path.isdir(self.config.local_storage_path):
             os.makedirs(self.config.local_storage_path)
 
         if not os.path.isdir(self.config.local_storage_path):
-            raise Exception(self.config.local_storage_path +
-                " directory does not seem to exist, "
-                "you need to set this for image processing downloads"
-            )
+            raise Exception("'{}' directory does not seem to exist, "
+                            "you need to set this for image processing "
+                            "downloads".format(self.config.local_storage_path))
 
         # test to write a dummy file to the directory
-        # to check is directory is writtable
+        # to check is directory is writable
         level, path = mkstemp(dir=self.config.local_storage_path)
         try:
             f = os.fdopen(level, "w")
             f.close()
             os.remove(path)
         except IOError:
-            raise Exception(self.config.local_storage_path +
-                " directory is not writeble, "
-                "you need to set this for image processing downloads"
-            )
+            raise Exception("'{}' directory is not writeable, "
+                            "you need to set this for image "
+                            "processing downloads".format(self.config.local_storage_path))

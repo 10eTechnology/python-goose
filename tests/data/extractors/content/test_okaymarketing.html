@@ -1030,7 +1030,7 @@ add_shortcode('printaddress', 'shortcode_printaddress');
 				themecss.rel = "stylesheet";
 				themecss.href = themecssurl;
 		}
-		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		//document.get_element_by_id("syntaxhighlighteranchor").append_child(themecss);
 		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
 	})();
 	SyntaxHighlighter.config.strings.expandSource = '+ expand source';

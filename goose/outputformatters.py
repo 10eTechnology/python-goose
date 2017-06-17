@@ -69,7 +69,7 @@ class OutputFormatter(object):
     def convert_to_text(self):
         txts = []
         for node in list(self.get_top_node()):
-            txt = self.parser.getText(node)
+            txt = self.parser.get_text(node)
             if txt:
                 txt = HTMLParser().unescape(txt)
                 txt_lis = innerTrim(txt).split(r'\n')
@@ -77,7 +77,7 @@ class OutputFormatter(object):
         return '\n\n'.join(txts)
 
     def add_newline_to_br(self):
-        for e in self.parser.getElementsByTag(self.top_node, tag='br'):
+        for e in self.parser.get_elements_by_tag(self.top_node, tag='br'):
             e.text = r'\n'
 
     def links_to_text(self):
@@ -85,7 +85,7 @@ class OutputFormatter(object):
         cleans up and converts any nodes that
         should be considered text into text
         """
-        self.parser.stripTags(self.get_top_node(), 'a')
+        self.parser.strip_tags(self.get_top_node(), 'a')
 
     def remove_negativescores_nodes(self):
         """\
@@ -95,7 +95,7 @@ class OutputFormatter(object):
         """
         gravity_items = self.parser.css_select(self.top_node, "*[gravityScore]")
         for item in gravity_items:
-            score = self.parser.getAttribute(item, 'gravityScore')
+            score = self.parser.get_attribute(item, 'gravityScore')
             score = int(score, 0)
             if score < 1:
                 item.getparent().remove(item)
@@ -108,27 +108,27 @@ class OutputFormatter(object):
         with whatever text is inside them
         code : http://lxml.de/api/lxml.etree-module.html#strip_tags
         """
-        self.parser.stripTags(self.get_top_node(), 'b', 'strong', 'i', 'br', 'sup')
+        self.parser.strip_tags(self.get_top_node(), 'b', 'strong', 'i', 'br', 'sup')
 
     def remove_fewwords_paragraphs(self):
         """\
         remove paragraphs that have less than x number of words,
         would indicate that it's some sort of link
         """
-        all_nodes = self.parser.getElementsByTags(self.get_top_node(), ['*'])
+        all_nodes = self.parser.get_elements_by_tags(self.get_top_node(), ['*'])
         all_nodes.reverse()
         for el in all_nodes:
-            tag = self.parser.getTag(el)
-            text = self.parser.getText(el)
+            tag = self.parser.get_tag(el)
+            text = self.parser.get_text(el)
             stop_words = self.stopwords_class(language=self.get_language()).get_stopword_count(text)
             if (tag != 'br' or text != '\\r') and stop_words.get_stopword_count() < 3 \
-                and len(self.parser.getElementsByTag(el, tag='object')) == 0 \
-                and len(self.parser.getElementsByTag(el, tag='embed')) == 0:
+                and len(self.parser.get_elements_by_tag(el, tag='object')) == 0 \
+                and len(self.parser.get_elements_by_tag(el, tag='embed')) == 0:
                 self.parser.remove(el)
             # TODO
             # check if it is in the right place
             else:
-                trimmed = self.parser.getText(el)
+                trimmed = self.parser.get_text(el)
                 if trimmed.startswith("(") and trimmed.endswith(")"):
                     self.parser.remove(el)
 

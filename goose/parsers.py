@@ -31,13 +31,13 @@ from goose.text import encodeValue
 class Parser(object):
 
     @classmethod
-    def xpath_re(self, node, expression):
+    def xpath_re(cls, node, expression):
         regexp_namespace = "http://exslt.org/regular-expressions"
         items = node.xpath(expression, namespaces={'re': regexp_namespace})
         return items
 
     @classmethod
-    def drop_tag(self, nodes):
+    def drop_tag(cls, nodes):
         if isinstance(nodes, list):
             for node in nodes:
                 node.drop_tag()
@@ -45,29 +45,29 @@ class Parser(object):
             nodes.drop_tag()
 
     @classmethod
-    def css_select(self, node, selector):
+    def css_select(cls, node, selector):
         return node.cssselect(selector)
 
     @classmethod
-    def fromstring(self, html):
+    def fromstring(cls, html):
         html = encodeValue(html)
-        self.doc = lxml.html.fromstring(html)
-        return self.doc
+        cls.doc = lxml.html.fromstring(html)
+        return cls.doc
 
     @classmethod
-    def nodeToString(self, node):
+    def node_to_string(cls, node):
         return etree.tostring(node)
 
     @classmethod
-    def replaceTag(self, node, tag):
+    def replace_tag(cls, node, tag):
         node.tag = tag
 
     @classmethod
-    def stripTags(self, node, *tags):
+    def strip_tags(cls, node, *tags):
         etree.strip_tags(node, *tags)
 
     @classmethod
-    def getElementById(self, node, idd):
+    def get_element_by_id(cls, node, idd):
         selector = '//*[@id="%s"]' % idd
         elems = node.xpath(selector)
         if elems:
@@ -75,13 +75,13 @@ class Parser(object):
         return None
 
     @classmethod
-    def getElementsByTag(self, node, tag=None, attr=None, value=None, childs=False):
-        NS = "http://exslt.org/regular-expressions"
+    def get_elements_by_tag(cls, node, tag=None, attr=None, value=None, childs=False):
+        name_space = "http://exslt.org/regular-expressions"
         # selector = tag or '*'
         selector = 'descendant-or-self::%s' % (tag or '*')
         if attr and value:
             selector = '%s[re:test(@%s, "%s", "i")]' % (selector, attr, value)
-        elems = node.xpath(selector, namespaces={"re": NS})
+        elems = node.xpath(selector, namespaces={"re": name_space})
         # remove the root node
         # if we have a selection tag
         if node in elems and (tag or childs):
@@ -89,15 +89,15 @@ class Parser(object):
         return elems
 
     @classmethod
-    def appendChild(self, node, child):
+    def append_child(cls, node, child):
         node.append(child)
 
     @classmethod
-    def childNodes(self, node):
+    def child_nodes(cls, node):
         return list(node)
 
     @classmethod
-    def childNodesWithText(self, node):
+    def child_nodes_with_text(cls, node):
         root = node
         # create the first text node
         # if we have some text in the node
@@ -107,7 +107,7 @@ class Parser(object):
             t.tag = 'text'
             root.text = None
             root.insert(0, t)
-        # loop childs
+        # loop children
         for c, n in enumerate(list(root)):
             idx = root.index(n)
             # don't process texts nodes
@@ -115,22 +115,22 @@ class Parser(object):
                 continue
             # create a text node for tail
             if n.tail:
-                t = self.createElement(tag='text', text=n.tail, tail=None)
+                t = cls.create_element(tag='text', text=n.tail, tail=None)
                 root.insert(idx + 1, t)
         return list(root)
 
     @classmethod
-    def textToPara(self, text):
-        return self.fromstring(text)
+    def text_to_para(cls, text):
+        return cls.fromstring(text)
 
     @classmethod
-    def getChildren(self, node):
+    def get_children(cls, node):
         return node.getchildren()
 
     @classmethod
-    def getElementsByTags(self, node, tags):
+    def get_elements_by_tags(cls, node, tags):
         selector = ','.join(tags)
-        elems = self.css_select(node, selector)
+        elems = cls.css_select(node, selector)
         # remove the root node
         # if we have a selection tag
         if node in elems:
@@ -138,7 +138,7 @@ class Parser(object):
         return elems
 
     @classmethod
-    def createElement(self, tag='p', text=None, tail=None):
+    def create_element(cls, tag='p', text=None, tail=None):
         t = lxml.html.HtmlElement()
         t.tag = tag
         t.text = text
@@ -146,15 +146,15 @@ class Parser(object):
         return t
 
     @classmethod
-    def getComments(self, node):
+    def get_comments(cls, node):
         return node.xpath('//comment()')
 
     @classmethod
-    def getParent(self, node):
+    def get_parent(cls, node):
         return node.getparent()
 
     @classmethod
-    def remove(self, node):
+    def remove(cls, node):
         parent = node.getparent()
         if parent is not None:
             if node.tail:
@@ -171,23 +171,23 @@ class Parser(object):
             parent.remove(node)
 
     @classmethod
-    def getTag(self, node):
+    def get_tag(cls, node):
         return node.tag
 
     @classmethod
-    def getText(self, node):
+    def get_text(cls, node):
         txts = [i for i in node.itertext()]
         return innerTrim(u' '.join(txts).strip())
 
     @classmethod
-    def previousSiblings(self, node):
+    def previous_siblings(cls, node):
         nodes = []
         for c, n in enumerate(node.itersiblings(preceding=True)):
             nodes.append(n)
         return nodes
 
     @classmethod
-    def previousSibling(self, node):
+    def previous_sibling(cls, node):
         nodes = []
         for c, n in enumerate(node.itersiblings(preceding=True)):
             nodes.append(n)
@@ -196,7 +196,7 @@ class Parser(object):
         return nodes[0] if nodes else None
 
     @classmethod
-    def nextSibling(self, node):
+    def next_sibling(cls, node):
         nodes = []
         for c, n in enumerate(node.itersiblings(preceding=False)):
             nodes.append(n)
@@ -205,40 +205,40 @@ class Parser(object):
         return nodes[0] if nodes else None
 
     @classmethod
-    def isTextNode(self, node):
+    def is_text_node(cls, node):
         return True if node.tag == 'text' else False
 
     @classmethod
-    def getAttribute(self, node, attr=None):
+    def get_attribute(cls, node, attr=None):
         if attr:
             return node.attrib.get(attr, None)
         return attr
 
     @classmethod
-    def delAttribute(self, node, attr=None):
+    def del_attribute(cls, node, attr=None):
         if attr:
             _attr = node.attrib.get(attr, None)
             if _attr:
                 del node.attrib[attr]
 
     @classmethod
-    def setAttribute(self, node, attr=None, value=None):
+    def set_attribute(cls, node, attr=None, value=None):
         if attr and value:
             node.set(attr, value)
 
     @classmethod
-    def outerHtml(self, node):
+    def outer_html(cls, node):
         e0 = node
         if e0.tail:
             e0 = deepcopy(e0)
             e0.tail = None
-        return self.nodeToString(e0)
+        return cls.node_to_string(e0)
 
 
 class ParserSoup(Parser):
 
     @classmethod
-    def fromstring(self, html):
+    def fromstring(cls, html):
         html = encodeValue(html)
-        self.doc = soupparser.fromstring(html)
-        return self.doc
+        cls.doc = soupparser.fromstring(html)
+        return cls.doc

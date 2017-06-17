@@ -29,11 +29,11 @@ class OpenGraphExtractor(BaseExtractor):
     def extract(self):
         opengraph_dict = {}
         node = self.article.doc
-        metas = self.parser.getElementsByTag(node, 'meta')
+        metas = self.parser.get_elements_by_tag(node, 'meta')
         for meta in metas:
-            attr = self.parser.getAttribute(meta, 'property')
+            attr = self.parser.get_attribute(meta, 'property')
             if attr is not None and attr.startswith("og:"):
-                value = self.parser.getAttribute(meta, 'content')
+                value = self.parser.get_attribute(meta, 'content')
                 if value:
                     opengraph_dict.update({attr.split(":")[1]: value})
         return opengraph_dict
